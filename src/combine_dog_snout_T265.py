@@ -78,9 +78,10 @@ class Nodo(object):
         # file = open(/home/pi/ros_catkin_ws/src/dog_snout/src/GPS_and_camera_log.csv)
 
         while not rospy.is_shutdown():
-                #self.pub.publish(self.x1)
+                # self.pub.publish(self.x1)
                 # now = datetime.now()
-                # file.write(str(now)+","+str(self.x1)+","+str(self.y1)+","+str(self.Imu_lin_accel)+","+str(self.Imu_ang_vel)+"\n")
+                # file.write(str(now) + "," + str(self.x1) + "," + str(self.y1) + "," + str(self.Imu_lin_accel) + "," + str(self.Imu_ang_vel) + "\n")
+                # file.flush()
                 print("MAIN DOG X1 " + (str)(self.x1))
                 print("MAIN DOG Y1 " + (str)(self.y1))
                 print ("---------")
