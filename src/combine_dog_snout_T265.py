@@ -75,7 +75,7 @@ class Nodo(object):
 
     def start(self):
         rospy.loginfo("COMBINE DOG SNOUT")
-        # file = open(/home/pi/ros_catkin_ws/src/dog_snout/src/GPS_and_camera_log.csv)
+        # file = open("/home/tegwyn/catkin_ws/src/dog_snout/src/GPS_and_camera_log.csv")
 
         while not rospy.is_shutdown():
                 # self.pub.publish(self.x1)
