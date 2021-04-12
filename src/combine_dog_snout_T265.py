@@ -1,11 +1,10 @@
 # source /opt/ros/melodic/setup.bash
-# cd /home/pi/ros_catkin_ws/src/dog_snout/src/ && python combine_dog_snout_T265.py
+# cd /home/tegwyn/catkin_ws/src/dog_snout/src/ && python combine_dog_snout_T265.py
 # https://stackoverflow.com/questions/37373211/update-the-global-variable-in-rospy
 
 # tegwyn@tegwyn-Xavier:~$ rostopic find sensor_msgs/Imu
 # /camera/accel/sample
 # /camera/gyro/sample
-# /camera/accel/imu_info
 
 
 import rospy
@@ -75,13 +74,30 @@ class Nodo(object):
 
     def start(self):
         rospy.loginfo("COMBINE DOG SNOUT")
-        # file = open("/home/tegwyn/catkin_ws/src/dog_snout/src/GPS_and_camera_log.csv")
+        file = open("/home/tegwyn/catkin_ws/src/dog_snout/src/GPS_and_camera_log.csv","a")
+        file.write("TimeStamp,dogX1,dogY1,lin_accel_x,lin_accel_y,lin_accel_z,ang_vel_x,ang_vel_y,ang_vel_z"+"\n")
 
         while not rospy.is_shutdown():
                 # self.pub.publish(self.x1)
-                # now = datetime.now()
-                # file.write(str(now) + "," + str(self.x1) + "," + str(self.y1) + "," + str(self.Imu_lin_accel) + "," + str(self.Imu_ang_vel) + "\n")
-                # file.flush()
+                now = str(datetime.now())+','
+                dogX1 = (str)(self.x1)+','
+                dogY1 = (str)(self.y1)+','
+
+                imu_lin_accel_str = str(self.Imu_lin_accel)
+                imu_lin_accel_str = imu_lin_accel_str.replace('\n',',')
+                imu_lin_accel_str = imu_lin_accel_str.replace('x:','')
+                imu_lin_accel_str = imu_lin_accel_str.replace('y:','')
+                imu_lin_accel_str = imu_lin_accel_str.replace('z:','')+','
+
+                imu_ang_vel_str = str(self.Imu_ang_vel)
+                imu_ang_vel_str = imu_ang_vel_str.replace('\n',',')
+                imu_ang_vel_str = imu_ang_vel_str.replace('x:','')
+                imu_ang_vel_str = imu_ang_vel_str.replace('y:','')
+                imu_ang_vel_str = imu_ang_vel_str.replace('z:','')
+
+                file.write(now + dogX1 + dogY1 + imu_lin_accel_str + imu_ang_vel_str + "\n")
+                file.flush()
+                
                 print("MAIN DOG X1 " + (str)(self.x1))
                 print("MAIN DOG Y1 " + (str)(self.y1))
                 print ("---------")
@@ -93,10 +109,10 @@ class Nodo(object):
                 print("NEW X Y " +(str)(self.newX) + " : " + (str)(self.newY))
                 print ("---------")
                 print("IMU linear accel: ")
-                print(str(self.Imu_lin_accel))
+                print(imu_lin_accel_str)
                 print ("---------")
                 print("IMU angular velocity: ")
-                print(str(self.Imu_ang_vel))
+                print(imu_ang_vel_str)
                 print("")
                                
                 self.loop_rate.sleep()
