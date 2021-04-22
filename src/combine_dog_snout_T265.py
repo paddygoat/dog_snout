@@ -81,16 +81,6 @@ class Nodo(object):
 
     def start(self):
 
-	# Declare RealSense pipeline, encapsulating the actual device and sensors
-        # pipe = rs.pipeline()
-
-        # Build config object and request pose data
-        # cfg = rs.config()
-        # cfg.enable_stream(rs.stream.pose)
-
-        # Start streaming with requested config
-        # pipe.start(cfg)
-
         rospy.loginfo("COMBINE DOG SNOUT")
         file = open("/home/tegwyn/catkin_ws/src/dog_snout/src/GPS_and_camera_log.csv","a")
         file.write("TimeStamp,dogX1,dogY1,headingX,headingY,positionX,positionY,positionZ,velocityX,velocityY,velocityZ,accelerationX,accelerationY,accelerationZ"+"\n")
