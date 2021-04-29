@@ -17,7 +17,10 @@ sys.path.append('/home/tegwyn/catkin_ws/devel/lib/')
 import pyrealsense2 as rs
 
 import rospy
+import std_msgs.msg
 from std_msgs.msg import String
+from std_msgs.msg import Float32
+from std_msgs.msg import Float32MultiArray
 from sensor_msgs.msg import NavSatFix, NavSatStatus, TimeReference
 from ublox_dog_msgs.msg import NavPOSECEF
 import os
@@ -48,13 +51,18 @@ class Nodo(object):
         self.newX = 0.0
         self.newY = 0.0
 
+        self.throttControl = 67.0
+
         
         # Node cycle rate (in Hz).
         self.loop_rate = rospy.Rate(5)
 
         # Publishers
-        #self.pub = rospy.Publisher("~chatter1", std_msgs.msg.Float64, queue_size=10)
-
+        self.pubxy = rospy.Publisher("dog_msg", Float32MultiArray, queue_size=10)
+        self.pubx = rospy.Publisher("dogx1_msg", Float32, queue_size=10)
+        self.puby = rospy.Publisher("dogy1_msg", Float32, queue_size=10)
+        # self.pubt = rospy.Publisher("throttControl_msg", Float32, queue_size=10)
+        
         # Subscribers
         #rospy.Subscriber("/ublox_dog_gps/fix", NavSatFix, callback_dog)
         rospy.Subscriber("/ublox_dog_gps/navposecef", NavPOSECEF, self.callback_dog_navposecef)    
@@ -81,6 +89,16 @@ class Nodo(object):
 
     def start(self):
 
+	# Declare RealSense pipeline, encapsulating the actual device and sensors
+        # pipe = rs.pipeline()
+
+        # Build config object and request pose data
+        # cfg = rs.config()
+        # cfg.enable_stream(rs.stream.pose)
+
+        # Start streaming with requested config
+        # pipe.start(cfg)
+
         rospy.loginfo("COMBINE DOG SNOUT")
         file = open("/home/tegwyn/catkin_ws/src/dog_snout/src/GPS_and_camera_log.csv","a")
         file.write("TimeStamp,dogX1,dogY1,headingX,headingY,positionX,positionY,positionZ,velocityX,velocityY,velocityZ,accelerationX,accelerationY,accelerationZ"+"\n")
@@ -88,7 +106,15 @@ class Nodo(object):
         # file.write("positionX,positionY,positionZ,velocityX,velocityY,velocityZ,accelerationX,accelerationY,accelerationZ,dogX1,dogY1,headingX,headingY"+"\n")
 
         while not rospy.is_shutdown():
-                # self.pub.publish(self.x1)
+                self.xy1 = Float32MultiArray()
+                self.xy1.data = [self.x1,self.y1]
+                self.pubxy.publish(self.xy1)
+                self.pubx.publish(self.x1)
+                self.puby.publish(self.y1)
+
+                # self.pubt.publish(self.throttControl)
+                self.throttControl = 67.0
+
                 self.newX = (self.x1 - self.x2)
                 self.newY = (self.y1 - self.y2)
     
